@@ -12,9 +12,8 @@ ASTRONOMICAL STANDARDS:
 - House System: Whole-Sign (Constellation-as-House)
 - Dasha: 120-Year Proportional Cycle (Actual Ecliptic Path)
 
-# © 2024 Howard North | SkyAsGround.com
-# Licensed under Creative Commons BY-NC-ND 4.0: https://creativecommons.org
-# One expression, many recognitions.
+© 2026 Howard North | SkyAsGround.com
+Licensed under Creative Commons BY-NC-ND 4.0: https://creativecommons.org
  
 """
 
