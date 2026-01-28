@@ -7,8 +7,8 @@ Streamlit Interface for:
 - The Calibration: Birth Time Rectification
 - The Current Frequency: Dasha Timeline Visualization
 
-Author: Howard North | SkyAsGround.com
-License: Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)
+© 2026 Howard North | SkyAsGround.com
+Licensed under Creative Commons BY-NC-ND 4.0: https://creativecommons.org
 """
 
 import streamlit as st
