@@ -19,6 +19,10 @@ from ground_engine import GroundEngine
 from rectification import RectificationScanner
 import json
 
+# Force-overwrite the title to remove old branding
+st.markdown("# SKY AS GROUND")
+st.markdown("### 13-Sign Ground | Consciousness-as-Ground")
+
 # ==============================================================================
 # PAGE CONFIGURATION
 # ==============================================================================
