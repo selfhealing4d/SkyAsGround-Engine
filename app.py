@@ -365,12 +365,12 @@ def create_dasha_timeline(dasha_info, current_date):
 
 st.markdown("""
 <div style='text-align: center; padding: 20px;'>
-    <h1 style='font-size: 3em; margin-bottom: 0;'>⭐ NORTH STAR</h1>
+    <h1 style='font-size: 3em; margin-bottom: 0;'>SKY AS GROUND</h1>
     <p style='font-size: 1.2em; color: #a8c5e6; margin-top: 0;'>
-        13-Sign Ground Astrology | Consciousness-as-Ground
+        13-Sign Expression | Consciousness-as-Ground
     </p>
     <p style='font-size: 0.9em; color: #8891a5;'>
-        The chart is the mirror, not the prediction. The wholeperson recognizes itself through astronomical precision.
+        You are the cosmos, not simply an aspect of it.
     </p>
 </div>
 """, unsafe_allow_html=True)
