@@ -713,7 +713,7 @@ class GroundEngine:
         """
         report = []
         report.append("=" * 70)
-        report.append("NORTH STAR: 13-Sign True IAU Constellation Chart")
+        report.append("SKY AS GROUND: 13-Sign True IAU Constellation Chart")
         report.append("Tropical J2000 Ecliptic Coordinates")
         report.append("Consciousness-as-Ground Recognition")
         report.append("=" * 70)
@@ -809,7 +809,7 @@ class GroundEngine:
 
 if __name__ == "__main__":
     print("\n" + "=" * 70)
-    print("NORTH STAR ENGINE - TEST CASE CALIBRATION")
+    print("SKY AS GROUND - ENGINE CALIBRATION")
     print("=" * 70 + "\n")
     
     # Initialize engine
