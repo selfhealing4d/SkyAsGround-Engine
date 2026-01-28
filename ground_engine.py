@@ -1,5 +1,5 @@
 """
-NORTH STAR: 13-Sign True Sidereal Astrology Engine
+SKY AS GROUND: 13-Sign True Sidereal Alignment Engine
 GROUND Engine - Core Calculation System
 
 ONTOLOGY: Consciousness-as-Ground
@@ -12,8 +12,10 @@ ASTRONOMICAL STANDARDS:
 - House System: Whole-Sign (Constellation-as-House)
 - Dasha: 120-Year Proportional Cycle (Actual Ecliptic Path)
 
-Author: North Star Project
-License: Consciousness-as-Ground Framework
+# © 2024 Howard North | SkyAsGround.com
+# Licensed under Creative Commons BY-NC-ND 4.0: https://creativecommons.org
+# One expression, many recognitions.
+ 
 """
 
 import swisseph as swe
