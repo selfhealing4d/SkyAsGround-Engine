@@ -1,5 +1,5 @@
 """
-NORTH STAR: Birth Time Rectification Scanner
+SKY AS GROUND: Birth Time Rectification Scanner
 The Calibration of Presence
 
 ONTOLOGY: Consciousness-as-Ground
