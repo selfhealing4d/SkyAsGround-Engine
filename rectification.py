@@ -15,8 +15,8 @@ METHODOLOGY: Dual-Trigger Boundary Detection + Dasha Correlation
 - SOFT PROXIMITY: ±0.5° (±30 arc-minutes)
 - Event-Dasha Correlation: Life events synchronized with Dasha transitions
 
-Author: North Star Project
-License: Consciousness-as-Ground Framework
+© 2026 Howard North | SkyAsGround.com
+Licensed under Creative Commons BY-NC-ND 4.0: https://creativecommons.org
 """
 
 from datetime import datetime, timedelta
