@@ -1,6 +1,6 @@
 """
-NORTH STAR: 13-Sign Ground Astrology Dashboard
-The Mirror of Consciousness-as-Ground
+SKY AS GROUND: 13-Sign Alignment Dashboard
+Consciousness-as-Ground Expressing as Wholeperson, Planet, and Boundary: One Expression, Many Recognitions
 
 Streamlit Interface for:
 - The Aperture: Natal Chart Generation
