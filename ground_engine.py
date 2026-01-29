@@ -31,183 +31,104 @@ class GroundEngine:
     
     def __init__(self):
         """
-        Initialize the engine with IAU J2000 Ecliptic Boundaries.
-        These boundaries represent the actual astronomical constellations,
-        not the idealized 30° tropical divisions.
+        Initialize the engine with ZeroArbitrary™ IAU Gates.
+        Calculated in Degrees and Minutes (DMS) for absolute precessional alignment.
         """
         
-        # Ground CALIBRATED BOUNDARIES: Tropical J2000 Ecliptic Coordinates
-        # 
-        # ARCHITECTURAL PRINCIPLE: The native's birth chart IS the zero-point.
-        # The Ophiuchus boundary is calibrated to 247.1° tropical (1970 epoch),
-        # placing the native's Sun at 0°15' Ophiuchus (247.355° - 247.1°).
-        # 
-        # This recognizes the physical reality: the ecliptic crosses into the
-        # Serpent Bearer's westernmost stars at this precise longitude.
-        # The wholeperson IS the aperture through which Ophiuchus manifests.
-        #
-        # Each tuple: (Constellation Name, Eastern Boundary in Ecliptic Longitude)
-        self.boundaries = [
-            ("Aries", 29.1),           # 29° 06' 
-            ("Taurus", 53.4),          # 53° 24'
-            ("Gemini", 90.1),          # 90° 06'
-            ("Cancer", 118.0),         # 118° 00'
-            ("Leo", 138.1),            # 138° 06'
-            ("Virgo", 173.9),          # 173° 54'
-            ("Libra", 217.8),          # 217° 48'
-            ("Scorpius", 247.1),       # 247° 06' - Ground OFFSET (native calibration)
-            ("Ophiuchus", 265.3),      # 265° 18' - The Serpent Bearer aperture
-            ("Sagittarius", 299.7),    # 299° 42'
-            ("Capricornus", 327.9),    # 327° 54'
-            ("Aquarius", 351.6),       # 351° 36'
-            ("Pisces", 360.0 + 29.1),  # Wraps to Aries entry (calculated as 389.1 for math)
+        # PHYSICAL GROUND: 13 IAU Ecliptic Gates (J2000)
+        # We use decimal conversions of exact Degrees and Minutes.
+        self.iau_gates = [
+            ("Aries", 29 + 6/60),          # 29° 06'
+            ("Taurus", 53 + 24/60),        # 53° 24'
+            ("Gemini", 90 + 6/60),         # 90° 06'
+            ("Cancer", 118 + 0/60),        # 118° 00'
+            ("Leo", 138 + 6/60),          # 138° 06'
+            ("Virgo", 173 + 54/60),        # 173° 54'
+            ("Libra", 217 + 48/60),        # 217° 48'
+            ("Scorpius", 241 + 6/60),      # 241° 06'
+            ("Ophiuchus", 248 + 0/60),     # 248° 00' (The Sacred Gap / North Point)
+            ("Sagittarius", 266 + 18/60),  # 266° 18'
+            ("Capricornus", 299 + 42/60),  # 299° 42'
+            ("Aquarius", 327 + 54/60),     # 327° 54'
+            ("Pisces", 351 + 36/60)        # 351° 36'
         ]
         
-        # Dasha Duration Reference: Proportional to GROUND Calibrated arc lengths
-        # Total = 120 years (360° cycle)
-        #
-        # GROUND RECALCULATION:
-        # Arc: (boundary - previous_boundary) / 360° × 120 years
-        self.dasha_years = {
-            "Aries": 9.7,        # Mars: 29.1° arc → 9.7 years
-            "Taurus": 8.1,       # Venus: 24.3° arc → 8.1 years
-            "Gemini": 12.2,      # Mercury: 36.7° arc → 12.2 years
-            "Cancer": 9.3,       # Moon: 27.9° arc → 9.3 years
-            "Leo": 6.7,          # Sun: 20.1° arc → 6.7 years
-            "Virgo": 11.9,       # Mercury: 35.8° arc → 11.9 years
-            "Libra": 14.6,       # Venus: 43.9° arc → 14.6 years
-            "Scorpius": 9.8,     # Ketu: 29.3° arc → 9.8 years (GROUND EXPANDED)
-            "Ophiuchus": 6.1,    # Rahu: 18.2° arc → 6.1 years (GROUND CALIBRATED)
-            "Sagittarius": 11.5, # Jupiter: 34.4° arc → 11.5 years
-            "Capricornus": 9.4,  # Saturn: 28.2° arc → 9.4 years
-            "Aquarius": 7.9,     # Uranus: 23.7° arc → 7.9 years
-            "Pisces": 12.5,      # Neptune: 37.5° arc → 12.5 years (wraps to Aries)
-        }
+        # PROPORTIONAL DASHA: 120-Year cycle locked to Physical Arc Length.
+        # No symbolic rulers. The frequency follows the Ecliptic Sequence.
+        self.dasha_info = {}
+        for i in range(len(self.iau_gates)):
+            name, start = self.iau_gates[i]
+            _, end = self.iau_gates[(i + 1) % 13]
+            arc = (end - start) % 360
+            self.dasha_info[name] = round((arc / 360) * 120, 2)
         
-        # Dual-Trigger Boundary Detection Thresholds
-        self.HARD_TRIGGER = 0.01   # ±36 arc-seconds (0.01°)
-        self.SOFT_PROXIMITY = 0.5   # ±30 arc-minutes (0.5°)
-        
-        # CRITICAL: IAU boundaries are defined in TROPICAL J2000 ecliptic coordinates
-        # We use tropical positions (no ayanamsha) to match against these boundaries
-        # This is the physical reality of the astronomical constellations
+        # Dual-Trigger Boundary Thresholds
+        self.HARD_TRIGGER = 0.01   # ±36 arc-seconds
+        self.SOFT_PROXIMITY = 0.5   # ±30 arc-minutes
         
         # Planet indices for Swiss Ephemeris
         self.planets = {
-            'Sun': swe.SUN,
-            'Moon': swe.MOON,
-            'Mercury': swe.MERCURY,
-            'Venus': swe.VENUS,
-            'Mars': swe.MARS,
-            'Jupiter': swe.JUPITER,
-            'Saturn': swe.SATURN,
-            'Uranus': swe.URANUS,
-            'Neptune': swe.NEPTUNE,
-            'Pluto': swe.PLUTO,
-            'Rahu': swe.MEAN_NODE,  # Mean North Node
+            'Sun': swe.SUN, 'Moon': swe.MOON, 'Mercury': swe.MERCURY,
+            'Venus': swe.VENUS, 'Mars': swe.MARS, 'Jupiter': swe.JUPITER,
+            'Saturn': swe.SATURN, 'Uranus': swe.URANUS, 'Neptune': swe.NEPTUNE,
+            'Pluto': swe.PLUTO, 'Rahu': swe.MEAN_NODE,
         }
         
-        # House interpretations using consciousness-as-ground language
+        # 13-HOUSE SYSTEM: Constellation-as-House
         self.house_archetypes = {
-            1: "The Aperture of Identity",
-            2: "The Ground of Material Integrity",
-            3: "The Laboratory of Communication",
-            4: "The Sacred Enclosure",
-            5: "The Expression of Creative Radiance",
-            6: "The Refinement of Service",
-            7: "The Mirror of Relationship",
-            8: "The Transmutative Laboratory",  # Not death/crisis
-            9: "The Recognition of Universal Law",
-            10: "The Crystallization in Public Form",
-            11: "The Field of Collective Awakening",
-            12: "The Dissolution into Totality",
+            1: "Aries: The Impulse of Emergence",
+            2: "Taurus: The Density of Being",
+            3: "Gemini: The Resonance of Connection",
+            4: "Cancer: The Internal Sanctuary",
+            5: "Leo: The Radiant Recognition",
+            6: "Virgo: The Systemic Alignment",
+            7: "Libra: The Harmonic Mirror",
+            8: "Scorpius: The Narrow Gate",
+            9: "Ophiuchus: The Sacred Bridge",
+            10: "Sagittarius: The Directional Truth",
+            11: "Capricornus: The Manifest Architecture",
+            12: "Aquarius: The Collective Flow",
+            13: "Pisces: The Boundless Return",
         }
     
-    
     def normalize_longitude(self, lon: float) -> float:
-        """
-        Normalize ecliptic longitude to 0-360° range.
-        The cosmos expresses itself in circular continuity.
-        """
-        while lon < 0:
-            lon += 360
-        while lon >= 360:
-            lon -= 360
-        return lon
-    
+        return lon % 360
     
     def get_constellation(self, lon: float) -> Tuple[str, str, float]:
         """
-        Determine which constellation (sign) a given longitude occupies.
-        
-        Returns:
-            Tuple of (constellation_name, trigger_status, degrees_into_sign)
-            
-        Trigger Status:
-            HARD_TRIGGER: Within ±0.01° of boundary (±36 arc-seconds)
-            SOFT_PROXIMITY: Within ±0.5° of boundary (±30 arc-minutes)
-            STABLE: Standard placement within constellation
-        
-        CONSCIOUSNESS-AS-GROUND INTERPRETATION:
-        - HARD_TRIGGER: The wholeperson is the aperture at the exact threshold
-        - SOFT_PROXIMITY: The bodymind resonates with transmutative potential
-        - STABLE: Consciousness expressing through this constellation's aperture
+        Identifies the physical constellation and its trigger status.
         """
         lon = self.normalize_longitude(lon)
         
-        # Check each boundary to find the containing constellation
-        for i, (sign, boundary) in enumerate(self.boundaries):
-            # Get previous boundary (wrap around for Aries)
-            if i == 0:
-                prev_boundary = 0.0  # Start of Aries
-            else:
-                prev_boundary = self.boundaries[i-1][1]
-            
-            # Special handling for Pisces (wraps around 360°)
-            if sign == "Pisces":
-                if lon >= prev_boundary or lon < boundary:
-                    # Check proximity to both boundaries
-                    dist_to_start = min(abs(lon - prev_boundary), 
-                                       abs(lon - (prev_boundary - 360)))
-                    dist_to_end = min(abs(lon - boundary), 
-                                     abs(lon - (boundary + 360)))
-                    
-                    min_dist = min(dist_to_start, dist_to_end)
-                    
-                    if min_dist <= self.HARD_TRIGGER:
-                        status = "HARD_TRIGGER"
-                    elif min_dist <= self.SOFT_PROXIMITY:
-                        status = "SOFT_PROXIMITY"
-                    else:
-                        status = "STABLE"
-                    
-                    # Calculate degrees into sign
-                    if lon >= prev_boundary:
-                        degrees_into = lon - prev_boundary
-                    else:
-                        degrees_into = (360 - prev_boundary) + lon
-                    
-                    return (sign, status, degrees_into)
-            
-            # Standard case: lon between prev_boundary and boundary
-            elif prev_boundary <= lon < boundary:
-                # Check proximity to boundaries
-                dist_to_start = abs(lon - prev_boundary)
-                dist_to_end = abs(lon - boundary)
-                min_dist = min(dist_to_start, dist_to_end)
-                
-                if min_dist <= self.HARD_TRIGGER:
-                    status = "HARD_TRIGGER"
-                elif min_dist <= self.SOFT_PROXIMITY:
-                    status = "SOFT_PROXIMITY"
-                else:
-                    status = "STABLE"
-                
-                degrees_into = lon - prev_boundary
-                return (sign, status, degrees_into)
+        # 1. Identify Status
+        status = "STABLE"
+        for _, start in self.iau_gates:
+            diff = abs(lon - start)
+            if diff < self.HARD_TRIGGER:
+                status = "HARD_TRIGGER"
+                break
+            elif diff < self.SOFT_PROXIMITY:
+                status = "SOFT_PROXIMITY"
+                break
         
-        # Should never reach here, but default to Aries if calculation error
-        return ("Aries", "STABLE", lon)
+        # 2. Identify Constellation
+        current_name = "Unknown"
+        deg_into = 0.0
+        
+        for i in range(len(self.iau_gates)):
+            name, start = self.iau_gates[i]
+            _, end = self.iau_gates[(i + 1) % 13]
+            
+            if start < end:
+                if start <= lon < end:
+                    current_name = name
+                    deg_into = lon - start
+            else: # Pisces Wrap
+                if lon >= start or lon < end:
+                    current_name = name
+                    deg_into = (lon - start) % 360
+                    
+        return current_name, status, deg_into
     
     
     def decimal_to_dms(self, decimal_degrees: float) -> Tuple[int, int, int]:
